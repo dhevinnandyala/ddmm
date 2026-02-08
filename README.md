@@ -38,6 +38,145 @@ Case is significant. `drake` maps to `(`, `Drake` to `{`, `DRAKE` to `[`.
 
 All other Python syntax is unchanged.
 
+## Examples
+
+### FizzBuzz
+
+Control flow, loops, and the `ann` keyword:
+
+```
+throw fizzbuzz drake n maye:
+    for i in range drake 1, n + 1 maye:
+        if i % 3 == 0 ann i % 5 == 0:
+            print drake "FizzBuzz" maye
+        elif i % 3 == 0:
+            print drake "Fizz" maye
+        elif i % 5 == 0:
+            print drake "Buzz" maye
+        else:
+            print drake i maye
+
+fizzbuzz drake 20 maye
+```
+
+### Classes
+
+Inheritance, methods, and f-strings:
+
+```
+class Player:
+    throw __init__ drake self, name, number, position maye:
+        self.name = name
+        self.number = number
+        self.position = position
+
+    throw __repr__ drake self maye:
+        touchdown f"#{self.number} {self.name} drake {self.position} maye"
+
+class Quarterback drake Player maye:
+    throw __init__ drake self, name, number maye:
+        super drake maye.__init__ drake name, number, "QB" maye
+        self.passing_yards = 0
+        self.touchdowns = 0
+
+    throw throw_pass drake self, yards, td=False maye:
+        self.passing_yards += yards
+        if td:
+            self.touchdowns += 1
+        touchdown yards
+
+    throw stats drake self maye:
+        touchdown Drake
+            "name": self.name,
+            "passing_yards": self.passing_yards,
+            "touchdowns": self.touchdowns
+        Maye
+
+qb = Quarterback drake "Drake Maye", 10 maye
+qb.throw_pass drake 45, td=True maye
+qb.throw_pass drake 12 maye
+qb.throw_pass drake 67, td=True maye
+print drake qb.stats drake maye maye
+```
+
+### Data structures
+
+All three bracket types — `drake`/`maye` for parens, `Drake`/`Maye` for curly braces, `DRAKE`/`MAYE` for square brackets:
+
+```
+Recipe json
+
+roster = DRAKE
+    Drake "name": "Drake Maye",    "pos": "QB", "number": 10 Maye,
+    Drake "name": "Rhamondre Stevenson", "pos": "RB", "number": 38 Maye,
+    Drake "name": "Ja'Lynn Polk",  "pos": "WR", "number": 0  Maye
+MAYE
+
+# Dict comprehension
+by_position = Drake
+    player DRAKE "pos" MAYE: player DRAKE "name" MAYE
+    for player in roster
+Maye
+print drake json.dumps drake by_position, indent=2 maye maye
+
+# Nested list comprehension
+numbers = DRAKE DRAKE i * j for j in range drake 1, 4 maye MAYE for i in range drake 1, 4 maye MAYE
+print drake numbers maye
+```
+
+### Decorators
+
+Nested functions, closures, and `*args`/`**kwargs`:
+
+```
+Recipe time
+
+throw timer drake func maye:
+    throw wrapper drake *args, **kwargs maye:
+        start = time.time drake maye
+        result = func drake *args, **kwargs maye
+        elapsed = time.time drake maye - start
+        print drake f"{func.__name__} took {elapsed:.4f}s" maye
+        touchdown result
+    touchdown wrapper
+
+@timer
+throw fibonacci drake n maye:
+    if n <= 1:
+        touchdown n
+    a, b = 0, 1
+    for _ in range drake n - 1 maye:
+        a, b = b, a + b
+    touchdown b
+
+print drake fibonacci drake 30 maye maye
+```
+
+### Flask API
+
+Real-world framework usage with `Bake`/`Recipe` imports:
+
+```
+Bake flask Recipe Flask, jsonify, request
+
+app = Flask drake __name__ maye
+
+players = DRAKE MAYE
+
+@app.route drake "/players", methods=DRAKE "GET", "POST" MAYE maye
+throw handle_players drake maye:
+    if request.method == "POST":
+        data = request.get_json drake maye
+        if data ann "name" in data:
+            players.append drake data maye
+            touchdown jsonify drake data maye, 201
+        touchdown jsonify drake Drake "error": "name is required" Maye maye, 400
+    touchdown jsonify drake players maye
+
+if __name__ == "__main__":
+    app.run drake debug=True maye
+```
+
 ## Installation
 
 Requires Python 3.10+.
