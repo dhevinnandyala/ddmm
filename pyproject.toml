@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drakedrakemayemaye"
+version = "1.0.0"
+description = "A Python interpreter where brackets are replaced with drake/maye syntax"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+keywords = ["python", "interpreter", "drake", "maye", "transpiler", "meme"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Interpreters",
+]
+
+[project.scripts]
+drakedrakemayemaye = "drakedrakemayemaye.cli:main"
+ddmm = "drakedrakemayemaye.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["drakedrakemayemaye*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

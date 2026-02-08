@@ -1,0 +1,7 @@
+def greet drake name maye:
+    return f"Hello, {name}!"
+
+def add drake a, b maye:
+    return a + b
+
+PI = 3.14159

@@ -1,0 +1,6 @@
+from utils import greet, add
+
+message = greet drake "World" maye
+result = add drake 2, 3 maye
+print drake message maye
+print drake result maye

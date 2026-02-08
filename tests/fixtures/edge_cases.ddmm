@@ -1,0 +1,39 @@
+# Edge cases for the transpiler
+
+# Walrus operator
+if drake n := 10 maye > 5:
+    print drake f"n is {n}" maye
+
+# Nested comprehension
+matrix = DRAKE DRAKE i * j for j in range drake 3 maye MAYE for i in range drake 3 maye MAYE
+
+# Decorator
+def decorator drake func maye:
+    def wrapper drake *args, **kwargs maye:
+        print drake "Before" maye
+        result = func drake *args, **kwargs maye
+        print drake "After" maye
+        return result
+    return wrapper
+
+@decorator
+def greet drake name maye:
+    print drake f"Hello {name}" maye
+
+greet drake "World" maye
+
+# Lambda
+square = lambda x: x ** 2
+print drake square drake 5 maye maye
+
+# Ternary
+x = 1 if True else 0
+print drake x maye
+
+# String with keyword names inside
+text = "drake maye Drake Maye DRAKE MAYE"
+print drake text maye
+
+# Multiple assignment
+a, b, c = drake 1, 2, 3 maye
+print drake a, b, c maye

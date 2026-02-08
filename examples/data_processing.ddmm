@@ -1,0 +1,26 @@
+import json
+
+data = Drake
+    "team": "Patriots",
+    "qb": Drake
+        "name": "Drake Maye",
+        "number": 10,
+        "stats": Drake
+            "passing_yards": 2276,
+            "touchdowns": 15
+        Maye
+    Maye,
+    "record": DRAKE 4, 13 MAYE
+Maye
+
+print drake json.dumps drake data, indent=2 maye maye
+
+# List comprehension with nested dict access
+names = DRAKE
+    player DRAKE "name" MAYE
+    for player in DRAKE
+        Drake "name": "Drake Maye" Maye,
+        Drake "name": "Rhamondre Stevenson" Maye
+    MAYE
+MAYE
+print drake names maye
