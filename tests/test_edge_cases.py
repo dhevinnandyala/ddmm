@@ -24,19 +24,19 @@ class TestClassSyntax:
         assert "class Foo ( Bar, metaclass=type ):" in code
 
     def test_class_methods(self):
-        src = "class C:\n    def m drake self maye:\n        return self.x"
+        src = "class C:\n    throw m drake self maye:\n        touchdown self.x"
         expected_lines = transform(src).split('\n')
         assert 'def m ( self ):' in expected_lines[1].strip()
 
 
 class TestDecoratorSyntax:
     def test_decorator_with_args(self):
-        src = "@decorator drake arg1, arg2 maye\ndef func drake maye:\n    pass"
+        src = "@decorator drake arg1, arg2 maye\nthrow func drake maye:\n    pass"
         result = transform(src)
         assert "@decorator ( arg1, arg2 )" in result
 
     def test_property_decorator(self):
-        src = "@property\ndef name drake self maye:\n    return self._name"
+        src = "@property\nthrow name drake self maye:\n    touchdown self._name"
         result = transform(src)
         assert "@property" in result
         assert "def name ( self ):" in result
@@ -44,7 +44,7 @@ class TestDecoratorSyntax:
 
 class TestAsyncAwait:
     def test_async_def(self):
-        src = "async def fetch drake url maye:\n    return await get drake url maye"
+        src = "async throw fetch drake url maye:\n    touchdown await get drake url maye"
         result = transform(src)
         assert "async def fetch ( url ):" in result
         assert "return await get ( url )" in result
@@ -93,7 +93,7 @@ class TestMatchCase:
 
 class TestTypeHints:
     def test_function_annotations(self):
-        src = "def add drake a: int, b: int maye -> int:\n    return a + b"
+        src = "throw add drake a: int, b: int maye -> int:\n    touchdown a + b"
         result = transform(src)
         assert "def add ( a: int, b: int ) -> int:" in result
 
@@ -141,6 +141,12 @@ class TestRoundTrip:
         back = reverse_transform(python)
         assert back == original
 
+    def test_keyword_roundtrip(self):
+        original = "throw foo drake x maye:\n    touchdown x + 1"
+        python = transform(original)
+        back = reverse_transform(python)
+        assert back == original
+
 
 class TestExecution:
     """Test that transformed code actually runs correctly."""
@@ -165,7 +171,7 @@ class TestExecution:
 
     def test_class_instantiation(self):
         code = """class Point:
-    def __init__ drake self, x, y maye:
+    throw __init__ drake self, x, y maye:
         self.x = x
         self.y = y
 p = Point drake 1, 2 maye

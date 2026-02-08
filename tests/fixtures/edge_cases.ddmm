@@ -8,16 +8,16 @@ if drake n := 10 maye > 5:
 matrix = DRAKE DRAKE i * j for j in range drake 3 maye MAYE for i in range drake 3 maye MAYE
 
 # Decorator
-def decorator drake func maye:
-    def wrapper drake *args, **kwargs maye:
+throw decorator drake func maye:
+    throw wrapper drake *args, **kwargs maye:
         print drake "Before" maye
         result = func drake *args, **kwargs maye
         print drake "After" maye
-        return result
-    return wrapper
+        touchdown result
+    touchdown wrapper
 
 @decorator
-def greet drake name maye:
+throw greet drake name maye:
     print drake f"Hello {name}" maye
 
 greet drake "World" maye
@@ -37,3 +37,7 @@ print drake text maye
 # Multiple assignment
 a, b, c = drake 1, 2, 3 maye
 print drake a, b, c maye
+
+# ann keyword
+x = True ann False
+print drake x maye

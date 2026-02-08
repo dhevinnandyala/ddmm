@@ -1,7 +1,7 @@
-def fib drake n maye:
+throw fib drake n maye:
     if n <= 1:
-        return n
-    return fib drake n - 1 maye + fib drake n - 2 maye
+        touchdown n
+    touchdown fib drake n - 1 maye + fib drake n - 2 maye
 
 for i in range drake 10 maye:
     print drake fib drake i maye maye

@@ -148,6 +148,72 @@ class TestTransformEdgeCases:
         assert transform("x = '''drake maye'''") == "x = '''drake maye'''"
 
 
+class TestKeywordToKeyword:
+    def test_recipe_import(self):
+        assert transform("Recipe json") == "import json"
+
+    def test_bake_from(self):
+        assert transform("Bake os Recipe path") == "from os import path"
+
+    def test_throw_def(self):
+        assert transform("throw foo drake maye:") == "def foo ( ):"
+
+    def test_touchdown_return(self):
+        assert transform("touchdown 42") == "return 42"
+
+    def test_ann_and(self):
+        assert transform("x ann y") == "x and y"
+
+    def test_combined_with_brackets(self):
+        assert transform("throw add drake a, b maye:\n    touchdown a + b") == \
+            "def add ( a, b ):\n    return a + b"
+
+    def test_bake_recipe_combined(self):
+        assert transform("Bake utils Recipe greet, add") == "from utils import greet, add"
+
+    def test_strings_preserved(self):
+        assert transform('"throw ann Recipe"') == '"throw ann Recipe"'
+
+    def test_comments_preserved(self):
+        assert transform("# throw touchdown Recipe Bake ann") == \
+            "# throw touchdown Recipe Bake ann"
+
+    def test_word_boundaries_announce(self):
+        assert transform("announce = 1") == "announce = 1"
+
+    def test_word_boundaries_annual(self):
+        assert transform("annual = 1") == "annual = 1"
+
+    def test_word_boundaries_throwback(self):
+        assert transform("throwback = 1") == "throwback = 1"
+
+    def test_word_boundaries_Recipes(self):
+        assert transform("Recipes = 1") == "Recipes = 1"
+
+    def test_word_boundaries_touchdown_pass(self):
+        assert transform("touchdowns = 1") == "touchdowns = 1"
+
+
+class TestReverseKeywordToKeyword:
+    def test_import_to_recipe(self):
+        assert reverse_transform("import json") == "Recipe json"
+
+    def test_from_to_bake(self):
+        assert reverse_transform("from os import path") == "Bake os Recipe path"
+
+    def test_def_to_throw(self):
+        assert reverse_transform("def foo():") == "throw foo drake maye:"
+
+    def test_return_to_touchdown(self):
+        assert reverse_transform("return 42") == "touchdown 42"
+
+    def test_and_to_ann(self):
+        assert reverse_transform("x and y") == "x ann y"
+
+    def test_strings_preserved(self):
+        assert reverse_transform('"import def return"') == '"import def return"'
+
+
 class TestCheckBracketMatching:
     def test_valid_brackets(self):
         errors = check_bracket_matching("drake maye")

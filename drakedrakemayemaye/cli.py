@@ -40,6 +40,13 @@ Bracket mapping:
   drake / maye  →  ( )   parentheses
   Drake / Maye  →  { }   curly braces
   DRAKE / MAYE  →  [ ]   square brackets
+
+Keyword mapping:
+  Recipe        →  import
+  Bake          →  from
+  throw         →  def
+  touchdown     →  return
+  ann           →  and
 """
 
 

@@ -1,7 +1,7 @@
-def greet drake name maye:
-    return f"Hello, {name}!"
+throw greet drake name maye:
+    touchdown f"Hello, {name}!"
 
-def add drake a, b maye:
-    return a + b
+throw add drake a, b maye:
+    touchdown a + b
 
 PI = 3.14159

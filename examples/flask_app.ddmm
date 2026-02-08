@@ -1,10 +1,10 @@
-from flask import Flask, jsonify
+Bake flask Recipe Flask, jsonify
 
 app = Flask drake __name__ maye
 
 @app.route drake "/" maye
-def index drake maye:
-    return jsonify drake Drake
+throw index drake maye:
+    touchdown jsonify drake Drake
         "message": "Welcome to the Drake Maye API!",
         "brackets": Drake
             "parens": "drake / maye",
@@ -14,13 +14,13 @@ def index drake maye:
     Maye maye
 
 @app.route drake "/players" maye
-def players drake maye:
+throw players drake maye:
     roster = DRAKE
         Drake "name": "Drake Maye", "position": "QB", "number": 10 Maye,
         Drake "name": "Rhamondre Stevenson", "position": "RB", "number": 38 Maye,
         Drake "name": "Ja'Lynn Polk", "position": "WR", "number": 0 Maye
     MAYE
-    return jsonify drake roster maye
+    touchdown jsonify drake roster maye
 
 if __name__ == "__main__":
     app.run drake debug=True maye

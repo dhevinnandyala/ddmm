@@ -1,18 +1,21 @@
 # drakedrakemayemaye
 
-> *"You know what? Forget brackets. We're using Drake Maye now."*
-
-A fully functional Python-compatible interpreter where every bracket is replaced with **Drake Maye syntax**. It's Python. It's ridiculous. It works.
+A Python-compatible interpreter that replaces brackets and select keywords with Drake Maye-themed syntax. Files use the `.ddmm` extension. Under the hood it is a source-to-source transpiler that converts `.ddmm` to valid Python, then runs it via CPython.
 
 ```
-print drake "Hello, World!" maye
+Recipe json
+
+throw greet drake name maye:
+    touchdown f"Hello, {name}!"
+
+print drake greet drake "World" maye maye
 ```
 
-Yes, that prints `Hello, World!`. Yes, it's real. Yes, you can pip install it.
+## Syntax Mapping
 
-## Bracket Mapping
+### Brackets
 
-| Drake Maye | Python | Description |
+| ddmm | Python | Description |
 |---|---|---|
 | `drake` | `(` | Open paren |
 | `maye` | `)` | Close paren |
@@ -21,147 +24,114 @@ Yes, that prints `Hello, World!`. Yes, it's real. Yes, you can pip install it.
 | `DRAKE` | `[` | Open square bracket |
 | `MAYE` | `]` | Close square bracket |
 
-**Case matters.** `drake` is a paren, `Drake` is a curly brace, `DRAKE` is a square bracket.
+Case is significant. `drake` maps to `(`, `Drake` to `{`, `DRAKE` to `[`.
+
+### Keywords
+
+| ddmm | Python | Reference |
+|---|---|---|
+| `Recipe` | `import` | Ann's baking hobby |
+| `Bake` | `from` | Ann's baking hobby |
+| `throw` | `def` | Football |
+| `touchdown` | `return` | Football |
+| `ann` | `and` | Drake's wife |
+
+All other Python syntax is unchanged.
 
 ## Installation
+
+Requires Python 3.10+.
 
 ```bash
 pip install -e .
 ```
 
-This gives you two commands:
-- `drakedrakemayemaye` - the full, glorious name
-- `ddmm` - for when you want to actually type things quickly
+This installs two CLI commands: `drakedrakemayemaye` and `ddmm` (short alias).
 
 ## Usage
 
 ### Run a file
+
 ```bash
-drakedrakemayemaye hello.ddmm
-ddmm hello.ddmm
+ddmm script.ddmm
+ddmm script.ddmm --flag value   # args passed through to sys.argv
 ```
 
 ### Interactive REPL
+
 ```bash
 ddmm
 ```
 
+Launches a REPL with readline history and tab completion. Prompts are `ddmm>>> ` and `ddmm... ` for continuation lines.
+
 ### Inline execution
+
 ```bash
 ddmm -c "print drake 42 maye"
 ```
 
 ### Run a module
+
 ```bash
 ddmm -m json.tool <<< '{"key": "value"}'
 ```
 
-### Convert Python to Drake Maye
-```bash
-ddmm --convert existing_code.py
-```
+### Convert between formats
 
-### Convert Drake Maye to Python
 ```bash
-ddmm --to-python script.ddmm
+ddmm --convert file.py          # Python -> ddmm (stdout)
+ddmm --to-python file.ddmm      # ddmm -> Python (stdout)
+ddmm --show-transform file.ddmm # same as --to-python
 ```
 
 ### Validate bracket matching
+
 ```bash
-ddmm --check script.ddmm
+ddmm --check file.ddmm
 ```
 
-### Show transformed Python
-```bash
-ddmm --show-transform script.ddmm
-```
+Reports mismatched or unclosed bracket keywords with line numbers.
 
-## Examples
+### Other flags
 
-### Hello World
-```
-print drake "Hello, World!" maye
-```
+| Flag | Description |
+|---|---|
+| `-V`, `--version` | Print version |
+| `-h`, `--help` | Print help |
+| `-i` | Enter REPL after running a script |
+| `-u` | Unbuffered stdout/stderr |
+| `-E` | Ignore environment variables |
 
-### Fibonacci
-```
-def fib drake n maye:
-    if n <= 1:
-        return n
-    return fib drake n - 1 maye + fib drake n - 2 maye
+## Imports
 
-for i in range drake 10 maye:
-    print drake fib drake i maye maye
-```
-
-### Data Structures
-```
-data = Drake
-    "team": "Patriots",
-    "qb": Drake "name": "Drake Maye", "number": 10 Maye,
-    "record": DRAKE 4, 13 MAYE
-Maye
-```
-
-### Classes
-```
-class Dog drake Animal maye:
-    def __init__ drake self, name maye:
-        super drake maye.__init__ drake name, "Woof" maye
-
-    def speak drake self maye:
-        return f"{self.name} says {self.sound}!"
-```
-
-### F-Strings
-```
-name = "World"
-print drake f"Hello, {name.upper drake maye}!" maye
-```
-
-## How It Works
-
-Under the hood, `drakedrakemayemaye` is a **source-to-source transpiler**. It:
-
-1. Reads your `.ddmm` file
-2. Transforms Drake Maye syntax to standard Python brackets
-3. Hands the result to CPython for execution
-
-The transformation is **token-aware** — it won't touch keywords inside strings or comments. It correctly handles f-strings, raw strings, escape sequences, and all of Python's string prefix combinations.
-
-An import hook lets `.ddmm` files import other `.ddmm` files using standard `import` syntax. Compiled bytecode is cached in `__ddmmcache__/` directories for performance.
-
-## Architecture
+`.ddmm` files can import other `.ddmm` files, stdlib modules, and pip packages using standard import syntax (with `Recipe`/`Bake` keywords):
 
 ```
-drakedrakemayemaye/
-  transpiler.py  — Character-by-character state machine transformer
-  importer.py    — Import hook for .ddmm files (MetaPathFinder + Loader)
-  cli.py         — CLI entry point mirroring python's interface
-  repl.py        — Interactive REPL with readline support
-  compat.py      — Python version helpers
+Recipe os
+Bake pathlib Recipe Path
+Recipe json
 ```
+
+The import hook searches `sys.path` for `.ddmm` files and `__init__.ddmm` packages. Compiled bytecode is cached in `__ddmmcache__/` directories with mtime-based invalidation.
+
+## How it works
+
+The transpiler is a character-by-character state machine that:
+
+1. Replaces ddmm keywords with their Python equivalents
+2. Preserves string contents (regular, raw, byte, triple-quoted)
+3. Preserves comments
+4. Transforms keywords inside f-string expressions but not f-string literal text
+5. Respects word boundaries (`drakesmith`, `throwback`, `announce` are not touched)
+
+The transformation is line-preserving, so tracebacks show correct `.ddmm` filenames and line numbers.
 
 ## Compatibility
 
 - Python 3.10+
-- All Python features work: decorators, generators, async/await, walrus operator, match/case, type hints, everything
+- All Python features work (decorators, generators, async/await, walrus operator, match/case, type hints, etc.)
 - All stdlib modules and pip packages work normally
-- Tracebacks show correct `.ddmm` filenames and line numbers
-
-## FAQ
-
-**Q: Why?**
-A: Drake Maye.
-
-**Q: No seriously, why?**
-A: Because brackets are boring and Drake Maye is not.
-
-**Q: Is this production-ready?**
-A: It's as production-ready as your commitment to replacing brackets with quarterback names.
-
-**Q: Does string content get transformed?**
-A: No! `"drake maye"` stays as `"drake maye"`. The transpiler is token-aware and respects string boundaries, comments, and f-string expressions.
 
 ## License
 

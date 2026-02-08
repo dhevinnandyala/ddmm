@@ -1,4 +1,4 @@
-import requests
+Recipe requests
 
 response = requests.get drake "https://api.github.com" maye
 data = response.json drake maye

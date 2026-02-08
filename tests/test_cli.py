@@ -56,7 +56,7 @@ class TestCliFileExecution:
         # Create a temp script that prints sys.argv
         import tempfile
         with tempfile.NamedTemporaryFile(mode='w', suffix='.ddmm', delete=False) as f:
-            f.write('import sys\nprint drake sys.argv maye\n')
+            f.write('Recipe sys\nprint drake sys.argv maye\n')
             tmpfile = f.name
         try:
             result = run_ddmm(tmpfile, '--flag', 'value')

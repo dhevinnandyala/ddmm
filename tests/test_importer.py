@@ -34,7 +34,7 @@ class TestBasicImport:
     def test_import_simple_module(self, tmp_module_dir):
         # Create a .ddmm module
         mod_file = tmp_module_dir / '_test_ddmm_simple.ddmm'
-        mod_file.write_text('x = 42\ndef get_x drake maye:\n    return x\n')
+        mod_file.write_text('x = 42\nthrow get_x drake maye:\n    touchdown x\n')
 
         import _test_ddmm_simple
         assert _test_ddmm_simple.x == 42
@@ -52,11 +52,11 @@ class TestCrossImport:
     def test_ddmm_imports_ddmm(self, tmp_module_dir):
         # utils module
         utils = tmp_module_dir / '_test_ddmm_utils2.ddmm'
-        utils.write_text('def double drake n maye:\n    return n * 2\n')
+        utils.write_text('throw double drake n maye:\n    touchdown n * 2\n')
 
         # main module that imports utils
         main = tmp_module_dir / '_test_ddmm_main2.ddmm'
-        main.write_text('from _test_ddmm_utils2 import double\nresult = double drake 21 maye\n')
+        main.write_text('Bake _test_ddmm_utils2 Recipe double\nresult = double drake 21 maye\n')
 
         import _test_ddmm_main2
         assert _test_ddmm_main2.result == 42
@@ -65,7 +65,7 @@ class TestCrossImport:
 class TestStdlibImport:
     def test_stdlib_from_ddmm(self, tmp_module_dir):
         mod = tmp_module_dir / '_test_ddmm_stdlib.ddmm'
-        mod.write_text('import math\npi = math.pi\nsqrt4 = math.sqrt drake 4 maye\n')
+        mod.write_text('Recipe math\npi = math.pi\nsqrt4 = math.sqrt drake 4 maye\n')
 
         import _test_ddmm_stdlib
         assert abs(_test_ddmm_stdlib.pi - 3.14159) < 0.001

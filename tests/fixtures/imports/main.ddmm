@@ -1,4 +1,4 @@
-from utils import greet, add
+Bake utils Recipe greet, add
 
 message = greet drake "World" maye
 result = add drake 2, 3 maye

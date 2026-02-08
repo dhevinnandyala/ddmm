@@ -19,6 +19,26 @@ KEYWORD_TO_BRACKET = {
 
 BRACKET_TO_KEYWORD = {v: k for k, v in KEYWORD_TO_BRACKET.items()}
 
+# Keyword-to-keyword mapping (ddmm keyword -> Python keyword)
+KEYWORD_TO_KEYWORD = {
+    'Recipe': 'import',
+    'Bake': 'from',
+    'throw': 'def',
+    'touchdown': 'return',
+    'ann': 'and',
+}
+
+KEYWORD_FROM_KEYWORD = {v: k for k, v in KEYWORD_TO_KEYWORD.items()}
+
+# All ddmm keywords (brackets + keyword-to-keyword), ordered longest first for greedy matching
+_ALL_DDMM_KEYWORDS = sorted(
+    list(KEYWORD_TO_BRACKET.keys()) + list(KEYWORD_TO_KEYWORD.keys()),
+    key=len, reverse=True,
+)
+
+# All Python keywords to reverse (for reverse_transform)
+_ALL_PYTHON_KEYWORDS = sorted(KEYWORD_FROM_KEYWORD.keys(), key=len, reverse=True)
+
 # String prefixes (case-insensitive combos)
 _STRING_PREFIX_CHARS = set('fFrRbBuU')
 
@@ -29,13 +49,28 @@ def _is_identifier_char(ch: str) -> bool:
 
 
 def _match_keyword(source: str, pos: int) -> str | None:
-    """Try to match a drake/maye keyword at position pos with word boundary checks."""
-    for kw in ('drake', 'Drake', 'DRAKE', 'maye', 'Maye', 'MAYE'):
+    """Try to match a ddmm keyword at position pos with word boundary checks."""
+    for kw in _ALL_DDMM_KEYWORDS:
         end = pos + len(kw)
         if end > len(source):
             continue
         if source[pos:end] == kw:
             # Check word boundaries
+            if pos > 0 and _is_identifier_char(source[pos - 1]):
+                continue
+            if end < len(source) and _is_identifier_char(source[end]):
+                continue
+            return kw
+    return None
+
+
+def _match_python_keyword(source: str, pos: int) -> str | None:
+    """Try to match a Python keyword for reverse transform with word boundary checks."""
+    for kw in _ALL_PYTHON_KEYWORDS:
+        end = pos + len(kw)
+        if end > len(source):
+            continue
+        if source[pos:end] == kw:
             if pos > 0 and _is_identifier_char(source[pos - 1]):
                 continue
             if end < len(source) and _is_identifier_char(source[end]):
@@ -224,18 +259,23 @@ def transform(source: str) -> str:
                     i += 1
                     continue
 
-            # Try to match drake/maye keywords
+            # Try to match ddmm keywords
             kw = _match_keyword(source, i)
             if kw is not None:
-                bracket = KEYWORD_TO_BRACKET[kw]
-                # Add space before bracket if previous char is identifier char
-                if result and _is_identifier_char(result[-1]):
-                    result.append(' ')
-                result.append(bracket)
-                i += len(kw)
-                # Add space after bracket if next char is identifier char or quote
-                if i < n and (_is_identifier_char(source[i]) or source[i] in ('"', "'")):
-                    result.append(' ')
+                if kw in KEYWORD_TO_BRACKET:
+                    # Bracket keyword: drake -> (, etc.
+                    bracket = KEYWORD_TO_BRACKET[kw]
+                    if result and _is_identifier_char(result[-1]):
+                        result.append(' ')
+                    result.append(bracket)
+                    i += len(kw)
+                    if i < n and (_is_identifier_char(source[i]) or source[i] in ('"', "'")):
+                        result.append(' ')
+                else:
+                    # Keyword-to-keyword: throw -> def, etc.
+                    python_kw = KEYWORD_TO_KEYWORD[kw]
+                    result.append(python_kw)
+                    i += len(kw)
                 continue
 
             # Regular character
@@ -398,6 +438,14 @@ def reverse_transform(source: str) -> str:
                         i += 1
                         stack.pop()
                         continue
+
+            # Try to match Python keywords -> ddmm keywords (import -> Recipe, etc.)
+            py_kw = _match_python_keyword(source, i)
+            if py_kw is not None:
+                ddmm_kw = KEYWORD_FROM_KEYWORD[py_kw]
+                result.append(ddmm_kw)
+                i += len(py_kw)
+                continue
 
             # Try to match brackets -> keywords
             if ch in BRACKET_TO_KEYWORD:
@@ -589,9 +637,13 @@ def check_bracket_matching(source: str, filename: str = '<string>') -> list[Ddmm
                     i += 1
                     continue
 
-            # Check for keywords
+            # Check for keywords (only bracket keywords matter here)
             kw = _match_keyword(source, i)
             if kw is not None:
+                if kw in KEYWORD_TO_KEYWORD:
+                    # Keyword-to-keyword, not a bracket — skip
+                    i += len(kw)
+                    continue
                 if kw in _OPENERS:
                     stack_brackets.append((kw, line))
                 elif kw in _CLOSERS:

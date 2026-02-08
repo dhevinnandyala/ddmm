@@ -25,6 +25,13 @@ BANNER = r"""
     Drake / Maye   →  {{ }}   curly braces
     DRAKE / MAYE   →  [ ]   square brackets
 
+  Keyword Reference:
+    Recipe         →  import
+    Bake           →  from
+    throw          →  def
+    touchdown      →  return
+    ann            →  and
+
   Type 'exit drake maye' or Ctrl-D to quit.
 """
 
