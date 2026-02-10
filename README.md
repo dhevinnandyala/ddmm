@@ -263,7 +263,15 @@ Launches a REPL with readline history and tab completion. Prompts are `ddmm>>> `
 
 ### Jupyter / IPython
 
-Load the extension in any IPython session or Jupyter notebook:
+#### Local notebooks
+
+Make sure the package is installed in the kernel's environment:
+
+```bash
+pip install -e .
+```
+
+Then load the extension in the first cell:
 
 ```python
 %load_ext drakedrakemayemaye
@@ -285,6 +293,22 @@ To unload:
 ```python
 %unload_ext drakedrakemayemaye
 ```
+
+#### Google Colab / cloud notebooks
+
+Install directly from GitHub in the first cell:
+
+```python
+!pip install git+https://github.com/dhevinnandyala/ddmm.git
+```
+
+Then load the extension:
+
+```python
+%load_ext drakedrakemayemaye
+```
+
+All subsequent cells accept ddmm syntax. The same approach works for any cloud notebook environment (Kaggle, SageMaker, Deepnote, etc.) — just `pip install` then `%load_ext`.
 
 ### Inline execution
 
