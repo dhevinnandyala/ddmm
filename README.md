@@ -261,6 +261,31 @@ ddmm
 
 Launches a REPL with readline history and tab completion. Prompts are `ddmm>>> ` and `ddmm... ` for continuation lines.
 
+### Jupyter / IPython
+
+Load the extension in any IPython session or Jupyter notebook:
+
+```python
+%load_ext drakedrakemayemaye
+```
+
+After loading, every cell accepts ddmm syntax:
+
+```python
+throw greet drake name maye:
+    touchdown f"Hello, {name}!"
+
+print drake greet drake "World" maye maye
+```
+
+The `.ddmm` import hook is also activated, so `Recipe`/`Bake` imports of `.ddmm` files work.
+
+To unload:
+
+```python
+%unload_ext drakedrakemayemaye
+```
+
 ### Inline execution
 
 ```bash
