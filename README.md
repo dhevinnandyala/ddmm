@@ -40,6 +40,8 @@ All other Python syntax is unchanged.
 
 ## Examples
 
+See the [demo notebook](examples/ddmm_demo.ipynb) for a full walkthrough: EDA with pandas, visualizations with matplotlib, and model training with scikit-learn — all in ddmm syntax.
+
 ### FizzBuzz
 
 Control flow, loops, and the `ann` keyword:
